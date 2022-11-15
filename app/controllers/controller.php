@@ -14,36 +14,46 @@ class controller{
 /*----------------------------------invocacion GET --------------------------------------------------- */
 
     public function getAll($params = null){
-            if(!empty($_GET['sort']) && !empty($_GET['orderby'])){
-                $order = $_GET['orderby'] ?? "id";
-                $column = $_GET['sort'] ?? "asc";
+        if(!empty($_GET['ordermode']) && !empty($_GET['orderby'])){
+
+            if(!empty($_GET['ordermode']) && !empty($_GET['orderby']) && isset($_GET['limit']) && isset($_GET['offset'])){
+                $column = $_GET['orderby'] ?? "id";
+                $order = $_GET['ordermode'] ?? "asc";
+
+                $limit = intval($_GET['limit']) ?? 5;
+                $offset = intval($_GET['offset']) ?? 0;
+
+                $data = $this->model->getByOrderAndLimits($column,$order, $offset , $limit);
+                $this->view->response($data, 200);
+            }else{
+                $column = $_GET['orderby'] ?? "id";
+                $order = $_GET['ordermode'] ?? "asc";
                 $data = $this->model->getByOrder($column,$order);
                 $this->view->response($data, 200);
             }
+        }
             else{
             $data = $this->model-> getAllData();
             $this->view-> response($data, 200);
         }
     }
+
+    
     public function getInvById($params = null){
         if($params != null){
-            if(empty($_GET['orderby'])){
-                $id = $params[':ID'];
-                $data = $this->model-> getById($id);
-                if(!empty($data)){
-                    $this->view->response($data);
-                }else{
-                    $this->view->response("La invocacion con el ID = $id no existe", 404);
-                }
+            $id = $params[':ID'];
+            $data = $this->model-> getById($id);
+            if(!empty($data)){
+                $this->view->response($data,200);
+            }else{
+                $this->view->response("La invocacion con el ID = $id no existe", 404);
             }
         }
-}
+    }
 
 /*-------------------------------- invocacion DELETE - POST - PUT ------------------------------------ */
     public function delete($params = null){
-        if(empty($params)){
-            $this->view->response("coloque un ID valido", 400);
-        }else{
+        if($params != null){
             $id = $params[':ID'];
             $verif = $this->model->getById($id);
             if(!empty($verif)){
@@ -58,11 +68,14 @@ class controller{
     public function getData(){
         return json_decode($this->data);
     }
+
+
     public function addInv(){
        $data = $this->getData();
-       if (!empty($data->nombre) && !empty($data->elemento) && !empty($data->velocidad) && !empty($data->habilidad) && !empty($data->categoria)) {
-            $id = $this->model-> addInv($data->nombre, $data->elemento, $data->velocidad, $data->habilidad, $data->categoria);
-            $this->view->response("La invocacion se añadio con exito, ID = $id", 201);
+       if (!empty($data->nombre) && !empty($data->elemento) && !empty($data->velocidad) && !empty($data->habilidad)) {
+            $categoria = 1;
+            $id = $this->model-> addInv($data->nombre, $data->elemento, $data->velocidad, $data->habilidad, $categoria);
+            $this->view->response("La invocacion se creo con exito, ID = $id", 201);
         } 
         else{
         $this->view->response('Hace falta completar datos!', 400);
@@ -70,15 +83,19 @@ class controller{
     }
 
     public function updateInv($params = null){
-        if(!empty($params)){
-            $data = $this->getData();
-            if (!empty($data->nombre) || !empty($data->elemento) || !empty($data->velocidad) || !empty($data->habilidad || !empty($data->categoria))) {
-                $id = $params[':ID'];
-                $this->model-> update($data->nombre,$data->elemento, $data->velocidad,$data->habilidad,$data->categoria,$id);
-                $this->view->response("Se modifico con exito la invocacion ID = $id",200);
+        if($params!=null){
+            $id = $params[':ID'];
+            $verif = $this->model-> getById($id);
+            if(!empty($verif)){
+                $data = $this->getData();
+                if (!empty($data->nombre) || !empty($data->elemento) || !empty($data->velocidad) || !empty($data->habilidad)) {
+                        $categoria = 3;
+                        $this->model-> update($data->nombre,$data->elemento, $data->velocidad,$data->habilidad,$categoria, $id);
+                        $this->view->response("Se modifico con exito la invocacion ID = $id",200);
+                    }
+            }else{
+                $this->view->response("No existe invocacion seleccionada ID = $id",404);
             }
-        }else{
-            $this->view->response("complete los datos", 400);
         }
     }
     

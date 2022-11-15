@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-11-2022 a las 02:24:10
+-- Tiempo de generación: 15-11-2022 a las 23:43:57
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -90,6 +90,7 @@ INSERT INTO `invocacion` (`id`, `img`, `nombre`, `elemento`, `velocidad`, `habil
 INSERT INTO `invocacion` (`id`, `img`, `nombre`, `elemento`, `velocidad`, `habilidad`, `id_puntos`) VALUES(4, '', 'pegajoso(evo)', 'normal', 'baja', 'critico 200%', 1);
 INSERT INTO `invocacion` (`id`, `img`, `nombre`, `elemento`, `velocidad`, `habilidad`, `id_puntos`) VALUES(5, 'img/devon-icon.jpg', 'devon', 'normal', 'muy alta', 'qwe', 1);
 INSERT INTO `invocacion` (`id`, `img`, `nombre`, `elemento`, `velocidad`, `habilidad`, `id_puntos`) VALUES(6, 'img/kevin-icon.jpg', 'kevin', 'normal', 'media', 'rayo laser con las 3 cabezas', 4);
+INSERT INTO `invocacion` (`id`, `img`, `nombre`, `elemento`, `velocidad`, `habilidad`, `id_puntos`) VALUES(7, '', 'invocacion generica', 'normal', 'media', 'golpe serio', 1);
 
 --
 -- Índices para tablas volcadas
@@ -134,7 +135,7 @@ ALTER TABLE `db_users`
 -- AUTO_INCREMENT de la tabla `invocacion`
 --
 ALTER TABLE `invocacion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
