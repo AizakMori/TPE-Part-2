@@ -14,13 +14,19 @@ class controller{
 /*----------------------------------invocacion GET --------------------------------------------------- */
 
     public function getAll($params = null){
+            if(!empty($_GET['sort']) && !empty($_GET['orderby'])){
+                $order = $_GET['orderby'] ?? "id";
+                $column = $_GET['sort'] ?? "asc";
+                $data = $this->model->getByOrder($column,$order);
+                $this->view->response($data, 200);
+            }
+            else{
             $data = $this->model-> getAllData();
             $this->view-> response($data, 200);
-               
+        }
     }
     public function getInvById($params = null){
-        $valid = $params[':ID'];
-        if(!empty($valid)){
+        if($params != null){
             if(empty($_GET['orderby'])){
                 $id = $params[':ID'];
                 $data = $this->model-> getById($id);
@@ -29,25 +35,6 @@ class controller{
                 }else{
                     $this->view->response("La invocacion con el ID = $id no existe", 404);
                 }
-            }else{
-            $id = $params[':ID'];
-            $order =$_GET['orderby'];
-            if(!empty($order) && !empty($id)){
-                switch($order){
-                    case 'ASC':
-                        $data = $this->model->getByOrder($id,$order);
-                        $this->view-> response($data, 200);
-                        break;
-                    case 'DESC':
-                        $data = $this->model->getByOrder($id,$order);
-                        $this->view-> response($data, 200);
-                        break;
-                    default:
-                        $this->view->response("Ingrese un orden: 2 casos posibles ASC y DESC", 400);
-                        break;  
-                    }
-            }
-              
             }
         }
 }

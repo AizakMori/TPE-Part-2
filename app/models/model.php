@@ -19,8 +19,8 @@ class model{
             $valores = $query->fetchAll(PDO::FETCH_OBJ);
             return $valores;
         }
-        public function getByOrder($id, $order){
-            $query = $this->db->prepare("SELECT id, nombre, elemento, velocidad, habilidad FROM invocacion order by $id $order");
+        public function getByOrder($column, $order){
+            $query = $this->db->prepare("SELECT id, nombre, elemento, velocidad, habilidad FROM invocacion order by $column $order");
             $query->execute();
             $valores = $query->fetchAll(PDO::FETCH_OBJ);
             return $valores;
